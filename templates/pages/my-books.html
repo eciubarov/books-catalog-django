@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My books{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="block">
+            <div class="title">Books you've read</div>
+            <div class="books__list">
+                {% for book in read_books %}
+                    <article class="book__item">
+                        <figure>
+                            <img src="{{ book.cover.thumbnail }}" alt="{{ book.title }}">
+                        </figure>
+                        <h2>{{ book.title }}</h2>
+                        <p>by
+                            {% for author in book.authors.all %}
+                                {{ author }}
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <a href="{{ book.link }}">Read more</a>
+                    </article>
+                {% endfor %}
+            </div>
+            <div class="title">Books you've added</div>
+            <div class="books__list">
+                {% for book in books %}
+                    <article class="book__item">
+                        <figure>
+                            <img src="{{ book.cover.thumbnail }}" alt="{{ book.title }}">
+                        </figure>
+                        <h2>{{ book.title }}</h2>
+                        <p>by
+                            {% for author in book.authors.all %}
+                                {{ author }}
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <a href="{{ book.link }}">Read more</a>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

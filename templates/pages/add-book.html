@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div id="add-book" class="block">
+            <div class="title">{{ page_title }}</div>
+            <div class="v-cloak-loader page-loader" v-cloak></div>
+            <form v-cloak>
+                <input type="hidden" name="is_edit" value="{{ is_edit }}">
+                <input type="hidden" value="{{ book_id }}" name="book_id">
+                <div class="book-adding-form">
+                    <div class="upload-cover-wrapper">
+                        <div>
+                            <div class="page-loader" v-show="cover_loading"></div>
+                            <img src="" alt="" :src="cover_object.thumbnail" v-show="!cover_loading">
+                            <label for="cover" class="cover-note"><span v-show="!cover_loading">Upload book cover</span></label>
+                            <input type="file" id="cover" name="cover" ref="cover" accept="image/png, image/jpeg" v-on:change="uploadCover()"/>
+                        </div>
+                    </div>
+                    <div class="form__items">
+                        <div class="form__item">
+                            <label for="title">Book title</label>
+                            <input id="title" type="text" v-model="book_object.title"/>
+                        </div>
+                        <div class="form__item form__item-flex">
+                            <div>
+                                <label for="book_authors">Choose authors</label>
+                                <select v-model="book_object.authors" id="book_authors" multiple>
+                                    <option v-for="author in authors" :value="author.id">[[author.first_name]] [[author.last_name]]</option>
+                                </select>
+                            </div>
+                            <div class="small-form">
+                                <label for="first_name">Or add new one</label>
+                                <div class="form-flex">
+                                    <div class="form__item form__item-flex"><input type="text" id="first_name" placeholder="First name" v-model="author.first_name"><input  v-model="author.last_name" type="text" placeholder="Last name"></div>
+                                    <div class="form__item"><button @click.prevent="addAuthor()">Add new author</button></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form__item form__item-flex">
+                            <div>
+                               <label for="book_cats">Choose categories</label>
+                                <select v-model="book_object.categories" id="book_cats" multiple>
+                                    <option v-for="category in categories" :value="category.id">[[category.name]]</option>
+                                </select>
+                            </div>
+                            <div class="small-form">
+                                <label for="cat_name">Or add new one</label>
+                                <div class="form-flex">
+                                    <div class="form__item"><input type="text" id="cat_name" placeholder="New category name" v-model="category.name"></div>
+                                    <div class="form__item"><button @click.prevent="addCategory()">Add new category</button></div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form__item">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="description" v-model="book_object.description" cols="30" rows="10"></textarea>
+                        </div>
+                        <div class="form__item">
+                            <button class="button" :class="{loading: is_loading}" @click.prevent="addUpdateBook()">
+                                <span class="loading_button"><span class="loader"></span></span>
+                                <span class="loading_button_hide">Submit</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_footer %}
+    <script src="{% static 'js/book-add.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load static %}
+
+<header>
+    <div class="header-content">
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}" class="btn btn-dual mr-1">
+                        <span>demo-books-django</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <nav class="right">
+            <ul>
+                <li><a href="{% url 'books:my' %}" class="btn btn-dual mr-1">My books</a></li>
+                <li><a href="{% url 'books:add' %}" class="btn btn-dual mr-1">Add book</a></li>
+                {% if not request.user.is_authenticated %}
+{#                        <li><a href="#"></a></li>#}
+                    <li><a href="{% url 'users:signin' %}" class="btn btn-dual mr-1"><span>Sign in</span></a></li>
+                    <li><a href="{% url 'users:signup' %}" class="btn btn-dual mr-1">Sign up</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:logout' %}" class="btn btn-dual mr-1">Log out</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>

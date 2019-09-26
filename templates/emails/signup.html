@@ -1,0 +1,20 @@
+{% extends 'emails/common-base.html' %}
+
+{% block message %}
+    <p>Hello!<br>To confirm your email address and complete the signup procedure, follow the link below:</p>
+        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+            <tbody>
+            <tr>
+                <td align="left">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                            <td><a href="{{ link }}" target="_blank">Confirm email</a> </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static help_tags %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+    {% is_read book request.user as is_read %}
+    {% is_publisher book request.user as is_publisher %}
+    <div class="content">
+        <div class="block">
+            <div class="title">
+                {{ book.title }}
+                {% if is_read %}
+                    <p class="mark-as-read done">☑ Marked as read</p>
+                {% else %}
+                    <a href="{% url 'books:read' book.id %}" class="mark-as-read">Mark as read</a>
+                {% endif %}
+            </div>
+            <article id="book-view" class="book__view">
+                <div class="book__view-cover">
+                    <figure>
+                        <img src="{{ book.cover.thumbnail }}" alt="{{ book.title }}">
+                    </figure>
+                    {% if is_publisher %}
+                        <a href="{% url 'books:edit' book.id %}" class="book-edit-link">✏️ Edit book</a><br>
+                        <a href="{% url 'books:delete' book.id %}" class="book-delete-link" onclick="return confirm('Are you sure to delete this book?')">🗑️️ Detele book</a>
+                    {% endif %}
+                </div>
+                <div class="book__view-info">
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <h2>Authors</h2>
+                    <p>
+                        {% for author in book.authors.all %}
+                            {{ author }}
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <h2>Categories</h2>
+                    <p>
+                        {% for category in book.categories.all %}
+                            {{ category }}
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <h2>Description</h2>
+                    <p>{{ book.description }}</p>
+                    <h2>Reviews</h2>
+                    <div class="reviews__list" v-if="reviews.length > 0" v-cloak>
+                        <div class="reviews__list-item" v-for="review in reviews">
+                            <div class="reviews__list-username">[[review.username]]</div>
+                            <div class="reviews__list-text">
+                                [[review.text]]
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <p>There is no one review. Be first leave a review.</p>
+                    </div>
+                    <h2>Leave a review</h2>
+                    {% if request.user.is_authenticated %}
+                    <form action="#">
+                        <textarea v-model="review_object.text" name="your_review" id="your_review" cols="30" rows="10" placeholder="Type here your review"></textarea>
+                        <div class="form__item">
+                            <button class="button" :class="{loading: is_loading}" @click.prevent="addReview()">
+                                <span class="loading_button"><span class="loader"></span></span>
+                                <span class="loading_button_hide">Submit review</span>
+                            </button>
+                        </div>
+                    </form>
+                    {% else %}
+                        <p>Please, <a href="{% url 'users:signin' %}?next={{ request.path }}">sign in</a> your account to leave a review.</p>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_footer %}
+    <script src="{% static 'js/book-view.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block extra_header %}{% endblock %}
+
+{% block content %}
+	<div class="container wrapper-signin-page">
+        <div class="block">
+        <div class="title">Sign up</div>
+            <form action="{% url 'users:signup' %}" method="post">
+                {% csrf_token %}
+                {% if success == True %}
+                    <ol class="form_messages_list"><li>Please, activate your account. We sent you an activation link.</li></ol>
+                {% endif %}
+                {% if form.errors %}
+                    <ol class="form_messages_list error">
+                        {% for field in form %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <li><strong>{{ error|escape }}</strong></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form__item {{ field.has_error }}">
+{#                        {{ field.label_tag }}#}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="form__item">
+                    <button id="submit">Sign up</button>
+                </div>
+                <div class="form__item forgot-password">
+                    <a href="{% url 'users:signin' %}">Sign in</a><a href="{% url 'users:lost_password' %}">Forgot password?</a>
+                </div>
+                <div class="title title-social">Social sign up</div>
+                <div class="social">
+                    <a class="btn-social-fb" href="{% url 'social:begin' 'facebook' %}?next=/">Facebook</a>
+                    <a class="btn-social-gh" href="{% url 'social:begin' 'github' %}?next=/">GitHub</a>
+                    <a class="btn-social-gg" href="{% url 'social:begin' 'google-oauth2' %}?next=/">Google</a>
+                </div>
+            </form>
+{#            <div class="title">or sign in using social network</div>#}
+        </div>
+	</div>
+{% endblock %}
+
+{% block extra_footer %}{% endblock %}
